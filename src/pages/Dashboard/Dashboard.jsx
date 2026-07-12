@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import Navbar from "../../components/Navbar/Navbar";
@@ -12,7 +12,14 @@ function Dashboard() {
   const [description, setDescription] = useState("");
   const [editingTaskId, setEditingTaskId] = useState(null);
 
-  const [tasks, setTasks] = useState([
+  const [tasks, setTasks] = useState(() => {
+  const savedTasks = localStorage.getItem("tasks");
+
+  if (savedTasks) {
+    return JSON.parse(savedTasks);
+  }
+
+  return [
     {
       id: 1,
       title: "Complete React Assignment",
@@ -31,7 +38,8 @@ function Dashboard() {
       description: "Commit today's progress.",
       completed: false,
     },
-  ]);
+  ];
+});
 
   // Delete Task
   const deleteTask = (id) => {
@@ -92,6 +100,10 @@ const addTask = () => {
   setTitle(task.title);
   setDescription(task.description);
 };
+
+useEffect(() => {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}, [tasks]);
 
   return (
     <>
