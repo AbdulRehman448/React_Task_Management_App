@@ -2,8 +2,31 @@ import TaskCard from "../../components/TaskCard/TaskCard";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Footer from "../../components/Footer/Footer";
+import { useState } from "react";
 
 function Dashboard() {
+
+  const [tasks, setTasks] = useState([
+  {
+    id: 1,
+    title: "Complete React Assignment",
+    description: "Build the Task Management App.",
+    completed: false,
+  },
+  {
+    id: 2,
+    title: "Study React Hooks",
+    description: "Learn useState and useEffect.",
+    completed: true,
+  },
+  {
+    id: 3,
+    title: "Push Code to GitHub",
+    description: "Commit today's progress.",
+    completed: false,
+  },
+]);
+
   return (
     <>
       <Navbar />
@@ -27,7 +50,7 @@ function Dashboard() {
               </h2>
 
               <p className="text-4xl font-bold mt-3">
-                0
+                {tasks.length}
               </p>
             </div>
 
@@ -37,7 +60,7 @@ function Dashboard() {
               </h2>
 
               <p className="text-4xl font-bold text-green-600 mt-3">
-                0
+                {tasks.filter(task => task.completed).length}
               </p>
             </div>
 
@@ -47,7 +70,7 @@ function Dashboard() {
               </h2>
 
               <p className="text-4xl font-bold text-red-500 mt-3">
-                0
+                {tasks.filter(task => !task.completed).length}
               </p>
             </div>
 
@@ -67,9 +90,14 @@ function Dashboard() {
               Tasks
             </h2>
 
-            <TaskCard />
-            <TaskCard />
-            <TaskCard />
+            {tasks.map((task) => (
+              <TaskCard
+              key={task.id}
+              task={task}
+              />
+            )
+            )
+            }
 
           </div>
 
