@@ -12,6 +12,7 @@ function Dashboard() {
   const [description, setDescription] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
   const [editingTaskId, setEditingTaskId] = useState(null);
 
   const [tasks, setTasks] = useState(() => {
@@ -23,22 +24,25 @@ function Dashboard() {
 
   return [
     {
-      id: 1,
-      title: "Complete React Assignment",
-      description: "Build the Task Management App.",
-      completed: false,
-    },
+  id: 1,
+  title: "Complete React Assignment",
+  description: "Build the Task Management App.",
+  completed: false,
+  createdAt: 1,
+},
     {
       id: 2,
       title: "Study React Hooks",
       description: "Learn useState and useEffect.",
       completed: true,
+      createdAt: 2,
     },
     {
       id: 3,
       title: "Push Code to GitHub",
       description: "Commit today's progress.",
       completed: false,
+      createdAt: 3,
     },
   ];
 });
@@ -84,11 +88,12 @@ const addTask = () => {
   } else {
     // Add New Task
     const newTask = {
-      id: uuidv4(),
-      title,
-      description,
-      completed: false,
-    };
+  id: uuidv4(),
+  title,
+  description,
+  completed: false,
+  createdAt: Date.now(),
+};
 
     setTasks([...tasks, newTask]);
   }
@@ -118,6 +123,23 @@ const filteredTasks = tasks.filter((task) => {
     (filterStatus === "pending" && !task.completed);
 
   return matchesSearch && matchesFilter;
+});
+
+const sortedTasks = [...filteredTasks].sort((a, b) => {
+  switch (sortBy) {
+    case "oldest":
+  return a.createdAt - b.createdAt;
+
+    case "completed":
+      return Number(b.completed) - Number(a.completed);
+
+    case "pending":
+      return Number(a.completed) - Number(b.completed);
+
+    case "newest":
+default:
+  return b.createdAt - a.createdAt;
+  }
 });
 
   return (
@@ -172,7 +194,6 @@ const filteredTasks = tasks.filter((task) => {
             setTitle={setTitle}
             setDescription={setDescription}
             addTask={addTask}
-            onEdit={editTask}
             editingTaskId={editingTaskId}
           />
 
@@ -200,15 +221,32 @@ const filteredTasks = tasks.filter((task) => {
               <option value="completed">Completed</option>
               <option value="pending">Pending</option>
             </select>
+
+            <select
+  value={sortBy}
+  onChange={(e) => setSortBy(e.target.value)}
+  className="border rounded-lg p-3"
+>
+  <option value="newest">Newest First</option>
+  <option value="oldest">Oldest First</option>
+  <option value="completed">Completed First</option>
+  <option value="pending">Pending First</option>
+</select>
             
             </div>
 
-            {filteredTasks.length === 0 ? (
-              <p className="text-gray-500">
-                No tasks available.
-              </p>
+            {sortedTasks.length === 0 ? (
+              <div className="text-center py-10">
+                <h3 className="text-xl font-semibold text-gray-600">
+                  No matching tasks found
+                </h3>
+
+                <p className="text-gray-500 mt-2">
+                  Try changing your search or filter.
+                </p>
+              </div>
             ) : (
-              filteredTasks.map((task) => (
+              sortedTasks.map((task) => (
                 <TaskCard
                   key={task.id}
                   task={task}
