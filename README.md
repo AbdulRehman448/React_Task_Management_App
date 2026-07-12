@@ -104,7 +104,7 @@ This project demonstrates core React concepts including:
 ## 1 Clone Repository
 
 ```bash
-git clone https://github.com/AbdulRehman448/task-management-app.git
+git clone https://github.com/AbdulRehman448/React_Task_Management_App.git
 ```
 
 ## 2 Go to Project Folder
