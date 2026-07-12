@@ -11,6 +11,7 @@ function Dashboard() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [priority, setPriority] = useState("Medium");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
@@ -29,6 +30,7 @@ function Dashboard() {
   title: "Complete React Assignment",
   description: "Build the Task Management App.",
   dueDate: "2026-07-20",
+  priority: "High",
   completed: false,
   createdAt: 1,
 },
@@ -37,6 +39,7 @@ function Dashboard() {
       title: "Study React Hooks",
       description: "Learn useState and useEffect.",
       dueDate: "2026-07-22",
+      priority: "Medium",
       completed: true,
       createdAt: 2,
     },
@@ -45,6 +48,7 @@ function Dashboard() {
       title: "Push Code to GitHub",
       description: "Commit today's progress.",
       dueDate: "2026-07-22",
+      priority: "Low",
       completed: false,
       createdAt: 3,
     },
@@ -84,6 +88,7 @@ const addTask = () => {
               title,
               description,
               dueDate,
+              priority,
             }
           : task
       )
@@ -92,11 +97,12 @@ const addTask = () => {
     setEditingTaskId(null);
   } else {
     // Add New Task
-    const newTask = {
+const newTask = {
   id: uuidv4(),
   title,
   description,
   dueDate,
+  priority,
   completed: false,
   createdAt: Date.now(),
 };
@@ -107,6 +113,7 @@ const addTask = () => {
   setTitle("");
   setDescription("");
   setDueDate("");
+  setPriority("Medium");
 };
 
   const editTask = (task) => {
@@ -114,6 +121,7 @@ const addTask = () => {
   setTitle(task.title);
   setDescription(task.description);
   setDueDate(task.dueDate);
+  setPriority(task.priority);
 };
 
 useEffect(() => {

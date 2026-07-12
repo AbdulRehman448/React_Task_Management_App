@@ -2,9 +2,11 @@ function TaskForm({
   title,
   description,
   dueDate,
+  priority,
   setTitle,
   setDescription,
   setDueDate,
+  setPriority,
   addTask,
   editingTaskId,
 }) {
@@ -36,6 +38,16 @@ function TaskForm({
   onChange={(e) => setDueDate(e.target.value)}
   className="w-full border rounded-lg p-3 mb-4"
 />
+
+<select
+  value={priority}
+  onChange={(e) => setPriority(e.target.value)}
+  className="w-full border rounded-lg p-3 mb-4"
+>
+  <option value="High">High Priority</option>
+  <option value="Medium">Medium Priority</option>
+  <option value="Low">Low Priority</option>
+</select>
 
         <button
           onClick={addTask}
