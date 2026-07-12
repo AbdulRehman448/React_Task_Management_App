@@ -10,6 +10,7 @@ import TaskForm from "../../components/TaskForm/TaskForm";
 function Dashboard() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [editingTaskId, setEditingTaskId] = useState(null);
 
   const [tasks, setTasks] = useState(() => {
@@ -105,6 +106,13 @@ useEffect(() => {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }, [tasks]);
 
+const filteredTasks = tasks.filter((task) => {
+  return (
+    task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    task.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+});
+
   return (
     <>
       <Navbar />
@@ -166,13 +174,20 @@ useEffect(() => {
             <h2 className="text-2xl font-semibold mb-4">
               Tasks
             </h2>
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full border rounded-lg p-3 mb-6"
+            />
 
-            {tasks.length === 0 ? (
+            {filteredTasks.length === 0 ? (
               <p className="text-gray-500">
                 No tasks available.
               </p>
             ) : (
-              tasks.map((task) => (
+              filteredTasks.map((task) => (
                 <TaskCard
                   key={task.id}
                   task={task}
