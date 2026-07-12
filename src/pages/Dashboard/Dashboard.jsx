@@ -11,6 +11,7 @@ function Dashboard() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
   const [editingTaskId, setEditingTaskId] = useState(null);
 
   const [tasks, setTasks] = useState(() => {
@@ -107,10 +108,16 @@ useEffect(() => {
 }, [tasks]);
 
 const filteredTasks = tasks.filter((task) => {
-  return (
+  const matchesSearch =
     task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    task.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    task.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+  const matchesFilter =
+    filterStatus === "all" ||
+    (filterStatus === "completed" && task.completed) ||
+    (filterStatus === "pending" && !task.completed);
+
+  return matchesSearch && matchesFilter;
 });
 
   return (
@@ -174,13 +181,27 @@ const filteredTasks = tasks.filter((task) => {
             <h2 className="text-2xl font-semibold mb-4">
               Tasks
             </h2>
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+
             <input
               type="text"
               placeholder="Search tasks..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full border rounded-lg p-3 mb-6"
+              className="flex-1 border rounded-lg p-3"
             />
+          
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="border rounded-lg p-3"
+            >
+              <option value="all">All Tasks</option>
+              <option value="completed">Completed</option>
+              <option value="pending">Pending</option>
+            </select>
+            
+            </div>
 
             {filteredTasks.length === 0 ? (
               <p className="text-gray-500">
