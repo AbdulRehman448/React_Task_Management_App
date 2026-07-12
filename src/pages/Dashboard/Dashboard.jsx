@@ -32,6 +32,16 @@ function Dashboard() {
     setTasks(tasks.filter((task) => task.id !== id));
   };
 
+  const toggleComplete = (id) => {
+  setTasks(
+    tasks.map((task) =>
+      task.id === id
+        ? { ...task, completed: !task.completed }
+        : task
+    )
+  );
+};
+
   return (
     <>
       <Navbar />
@@ -78,6 +88,7 @@ function Dashboard() {
                 key={task.id}
                 task={task}
                 onDelete={deleteTask}
+                onComplete={toggleComplete}
               />
             ))}
           </div>
