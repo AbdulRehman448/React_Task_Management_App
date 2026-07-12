@@ -104,7 +104,7 @@ This project demonstrates core React concepts including:
 ## 1 Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/task-management-app.git
+git clone https://github.com/AbdulRehman448/task-management-app.git
 ```
 
 ## 2 Go to Project Folder
@@ -204,10 +204,8 @@ src
 
 # 🌐 Live Demo
 
-If deployed, add your live project link here.
-
 ```
-https://your-project-link.vercel.app
+https://taskmanager-vert-delta.vercel.app/
 ```
 
 ---
