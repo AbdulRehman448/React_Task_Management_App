@@ -1,4 +1,4 @@
-function TaskCard({ task, onDelete, onComplete }) {
+function TaskCard({ task, onDelete, onComplete, onEdit }) {
   return (
     <div className="bg-white shadow-md rounded-lg p-5 border border-gray-200 mb-4">
       <div className="flex justify-between items-center">
@@ -33,10 +33,13 @@ function TaskCard({ task, onDelete, onComplete }) {
             >
             {task.completed ? "Undo" : "Complete"}
         </button>
-
-          <button className="bg-blue-500 text-white px-4 py-2 rounded">
-            Edit
-          </button>
+            
+    <button
+      onClick={() => onEdit(task)}
+      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+    >
+      Edit
+    </button>
 
           <button
   onClick={() => onDelete(task.id)}

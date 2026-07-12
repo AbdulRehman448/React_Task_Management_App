@@ -50,12 +50,29 @@ function Dashboard() {
   };
 
   // Add Task
-  const addTask = () => {
-    if (title.trim() === "" || description.trim() === "") {
-      alert("Please fill in all fields.");
-      return;
-    }
+const addTask = () => {
+  if (title.trim() === "" || description.trim() === "") {
+    alert("Please fill in all fields.");
+    return;
+  }
 
+  // Update Existing Task
+  if (editingTaskId !== null) {
+    setTasks(
+      tasks.map((task) =>
+        task.id === editingTaskId
+          ? {
+              ...task,
+              title,
+              description,
+            }
+          : task
+      )
+    );
+
+    setEditingTaskId(null);
+  } else {
+    // Add New Task
     const newTask = {
       id: uuidv4(),
       title,
@@ -64,10 +81,11 @@ function Dashboard() {
     };
 
     setTasks([...tasks, newTask]);
+  }
 
-    setTitle("");
-    setDescription("");
-  };
+  setTitle("");
+  setDescription("");
+};
 
   const editTask = (task) => {
   setEditingTaskId(task.id);
@@ -127,6 +145,8 @@ function Dashboard() {
             setTitle={setTitle}
             setDescription={setDescription}
             addTask={addTask}
+            onEdit={editTask}
+            editingTaskId={editingTaskId}
           />
 
           {/* Task Section */}
@@ -146,6 +166,7 @@ function Dashboard() {
                   task={task}
                   onDelete={deleteTask}
                   onComplete={toggleComplete}
+                  onEdit={editTask}
                 />
               ))
             )}

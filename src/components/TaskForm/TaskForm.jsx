@@ -4,6 +4,7 @@ function TaskForm({
   setTitle,
   setDescription,
   addTask,
+  editingTaskId,
 }) {
   return (
     <div className="bg-white rounded-lg shadow p-6 mb-8">
@@ -27,12 +28,12 @@ function TaskForm({
         rows="4"
       />
 
-      <button
-        onClick={addTask}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg"
-      >
-        Add Task
-      </button>
+        <button
+          onClick={addTask}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg"
+        >
+          {editingTaskId ? "Update Task" : "Add Task"}
+        </button>
     </div>
   );
 }
