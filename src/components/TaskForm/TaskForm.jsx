@@ -1,8 +1,10 @@
 function TaskForm({
   title,
   description,
+  dueDate,
   setTitle,
   setDescription,
+  setDueDate,
   addTask,
   editingTaskId,
 }) {
@@ -27,6 +29,13 @@ function TaskForm({
         className="w-full border rounded-lg p-3 mb-4"
         rows="4"
       />
+
+      <input
+  type="date"
+  value={dueDate}
+  onChange={(e) => setDueDate(e.target.value)}
+  className="w-full border rounded-lg p-3 mb-4"
+/>
 
         <button
           onClick={addTask}

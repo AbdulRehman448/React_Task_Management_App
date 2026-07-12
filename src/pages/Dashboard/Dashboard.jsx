@@ -10,6 +10,7 @@ import TaskForm from "../../components/TaskForm/TaskForm";
 function Dashboard() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [dueDate, setDueDate] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
@@ -27,6 +28,7 @@ function Dashboard() {
   id: 1,
   title: "Complete React Assignment",
   description: "Build the Task Management App.",
+  dueDate: "2026-07-20",
   completed: false,
   createdAt: 1,
 },
@@ -34,6 +36,7 @@ function Dashboard() {
       id: 2,
       title: "Study React Hooks",
       description: "Learn useState and useEffect.",
+      dueDate: "2026-07-22",
       completed: true,
       createdAt: 2,
     },
@@ -41,6 +44,7 @@ function Dashboard() {
       id: 3,
       title: "Push Code to GitHub",
       description: "Commit today's progress.",
+      dueDate: "2026-07-22",
       completed: false,
       createdAt: 3,
     },
@@ -79,6 +83,7 @@ const addTask = () => {
               ...task,
               title,
               description,
+              dueDate,
             }
           : task
       )
@@ -91,6 +96,7 @@ const addTask = () => {
   id: uuidv4(),
   title,
   description,
+  dueDate,
   completed: false,
   createdAt: Date.now(),
 };
@@ -100,12 +106,14 @@ const addTask = () => {
 
   setTitle("");
   setDescription("");
+  setDueDate("");
 };
 
   const editTask = (task) => {
   setEditingTaskId(task.id);
   setTitle(task.title);
   setDescription(task.description);
+  setDueDate(task.dueDate);
 };
 
 useEffect(() => {
@@ -189,13 +197,15 @@ default:
 
           {/* Task Form */}
           <TaskForm
-            title={title}
-            description={description}
-            setTitle={setTitle}
-            setDescription={setDescription}
-            addTask={addTask}
-            editingTaskId={editingTaskId}
-          />
+  title={title}
+  description={description}
+  dueDate={dueDate}
+  setTitle={setTitle}
+  setDescription={setDescription}
+  setDueDate={setDueDate}
+  addTask={addTask}
+  editingTaskId={editingTaskId}
+/>
 
           {/* Task Section */}
           <div className="bg-white rounded-lg shadow p-8">
