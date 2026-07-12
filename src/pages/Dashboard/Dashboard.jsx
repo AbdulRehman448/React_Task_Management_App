@@ -14,6 +14,7 @@ function Dashboard() {
   const [priority, setPriority] = useState("Medium");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [editingTaskId, setEditingTaskId] = useState(null);
 
@@ -133,29 +134,51 @@ const filteredTasks = tasks.filter((task) => {
     task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     task.description.toLowerCase().includes(searchTerm.toLowerCase());
 
-  const matchesFilter =
-    filterStatus === "all" ||
-    (filterStatus === "completed" && task.completed) ||
-    (filterStatus === "pending" && !task.completed);
+const matchesFilter =
+  filterStatus === "all" ||
+  (filterStatus === "completed" && task.completed) ||
+  (filterStatus === "pending" && !task.completed);
 
-  return matchesSearch && matchesFilter;
+const matchesPriority =
+  priorityFilter === "all" ||
+  task.priority === priorityFilter;
+
+return matchesSearch && matchesFilter && matchesPriority;
 });
+
+<select
+  value={priorityFilter}
+  onChange={(e) => setPriorityFilter(e.target.value)}
+  className="border rounded-lg p-3"
+>
+  <option value="all">All Priorities</option>
+  <option value="High">High</option>
+  <option value="Medium">Medium</option>
+  <option value="Low">Low</option>
+</select>
 
 const sortedTasks = [...filteredTasks].sort((a, b) => {
   switch (sortBy) {
-    case "oldest":
-  return a.createdAt - b.createdAt;
+  case "dueDate":
+    return new Date(a.dueDate) - new Date(b.dueDate);
 
-    case "completed":
-      return Number(b.completed) - Number(a.completed);
+  case "priority": {
+    const priorityOrder = {
+      High: 3,
+      Medium: 2,
+      Low: 1,
+    };
 
-    case "pending":
-      return Number(a.completed) - Number(b.completed);
-
-    case "newest":
-default:
-  return b.createdAt - a.createdAt;
+    return priorityOrder[b.priority] - priorityOrder[a.priority];
   }
+
+  case "oldest":
+    return a.createdAt - b.createdAt;
+
+  case "newest":
+  default:
+    return b.createdAt - a.createdAt;
+}
 });
 
   return (
@@ -245,10 +268,10 @@ default:
   onChange={(e) => setSortBy(e.target.value)}
   className="border rounded-lg p-3"
 >
-  <option value="newest">Newest First</option>
-  <option value="oldest">Oldest First</option>
-  <option value="completed">Completed First</option>
-  <option value="pending">Pending First</option>
+<option value="newest">Recently Added</option>
+<option value="oldest">Oldest First</option>
+<option value="dueDate">Due Date</option>
+<option value="priority">Priority</option>
 </select>
             
             </div>
