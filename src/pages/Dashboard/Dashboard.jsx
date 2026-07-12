@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import {
+  FaClipboardList,
+  FaCheckCircle,
+  FaHourglassHalf,
+  FaSearch,
+} from "react-icons/fa";
 
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -8,6 +14,9 @@ import TaskCard from "../../components/TaskCard/TaskCard";
 import TaskForm from "../../components/TaskForm/TaskForm";
 
 function Dashboard() {
+  const savedUser = JSON.parse(localStorage.getItem("user"));
+  const userName = savedUser?.name || "User";
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -146,17 +155,6 @@ const matchesPriority =
 return matchesSearch && matchesFilter && matchesPriority;
 });
 
-<select
-  value={priorityFilter}
-  onChange={(e) => setPriorityFilter(e.target.value)}
-  className="border rounded-lg p-3"
->
-  <option value="all">All Priorities</option>
-  <option value="High">High</option>
-  <option value="Medium">Medium</option>
-  <option value="Low">Low</option>
-</select>
-
 const sortedTasks = [...filteredTasks].sort((a, b) => {
   switch (sortBy) {
   case "dueDate":
@@ -188,75 +186,116 @@ const sortedTasks = [...filteredTasks].sort((a, b) => {
       <div className="flex">
         <Sidebar />
 
-        <main className="flex-1 bg-gray-100 min-h-screen p-8">
-          <h1 className="text-4xl font-bold mb-8">
-            Dashboard
-          </h1>
+        <main className="flex-1 bg-gray-50 min-h-screen p-4 md:p-8">
 
-          {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-gray-500 text-lg">
-                Total Tasks
-              </h2>
+          {/* Welcome Banner */}
+          <div className="relative overflow-hidden bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 rounded-3xl shadow-xl p-8 mb-8 text-white">
+            <div className="absolute w-72 h-72 bg-cyan-400 rounded-full blur-3xl opacity-20 -top-16 -left-16"></div>
+            <div className="absolute w-72 h-72 bg-purple-400 rounded-full blur-3xl opacity-20 -bottom-16 -right-16"></div>
 
-              <p className="text-4xl font-bold mt-3">
-                {tasks.length}
-              </p>
-            </div>
+            <div className="relative z-10">
+              <h1 className="text-4xl font-bold">
+                Welcome back, {userName} 👋
+              </h1>
 
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-gray-500 text-lg">
-                Completed
-              </h2>
-
-              <p className="text-4xl font-bold text-green-600 mt-3">
-                {tasks.filter((task) => task.completed).length}
-              </p>
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-gray-500 text-lg">
-                Pending
-              </h2>
-
-              <p className="text-4xl font-bold text-red-500 mt-3">
-                {tasks.filter((task) => !task.completed).length}
+              <p className="text-blue-100 mt-2">
+                Organize, manage and track your daily tasks efficiently.
               </p>
             </div>
           </div>
 
+          {/* Statistics */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 flex items-center gap-5 hover:shadow-lg hover:-translate-y-1 transition duration-300">
+              <div className="bg-blue-100 text-blue-600 p-4 rounded-xl">
+                <FaClipboardList size={24} />
+              </div>
+
+              <div>
+                <h2 className="text-gray-500 text-sm font-medium">
+                  Total Tasks
+                </h2>
+
+                <p className="text-3xl font-bold text-gray-800 mt-1">
+                  {filteredTasks.length}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 flex items-center gap-5 hover:shadow-lg hover:-translate-y-1 transition duration-300">
+              <div className="bg-green-100 text-green-600 p-4 rounded-xl">
+                <FaCheckCircle size={24} />
+              </div>
+
+              <div>
+                <h2 className="text-gray-500 text-sm font-medium">
+                  Completed
+                </h2>
+
+                <p className="text-3xl font-bold text-green-600 mt-1">
+                  {
+  filteredTasks.filter((task) => task.completed).length
+}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 flex items-center gap-5 hover:shadow-lg hover:-translate-y-1 transition duration-300">
+              <div className="bg-red-100 text-red-500 p-4 rounded-xl">
+                <FaHourglassHalf size={24} />
+              </div>
+
+              <div>
+                <h2 className="text-gray-500 text-sm font-medium">
+                  Pending
+                </h2>
+
+                <p className="text-3xl font-bold text-red-500 mt-1">
+                  {
+  filteredTasks.filter((task) => !task.completed).length
+}
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Task Form */}
-          <TaskForm
+  <TaskForm
   title={title}
   description={description}
   dueDate={dueDate}
+  priority={priority}
   setTitle={setTitle}
   setDescription={setDescription}
   setDueDate={setDueDate}
+  setPriority={setPriority}
   addTask={addTask}
   editingTaskId={editingTaskId}
 />
 
           {/* Task Section */}
-          <div className="bg-white rounded-lg shadow p-8">
-            <h2 className="text-2xl font-semibold mb-4">
+          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
               Tasks
             </h2>
-            <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
 
-            <input
-              type="text"
-              placeholder="Search tasks..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 border rounded-lg p-3"
-            />
-          
+            <div className="relative">
+              <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+
+              <input
+                type="text"
+                placeholder="Search tasks..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full border border-gray-300 rounded-xl p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              />
+            </div>
+
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="border rounded-lg p-3"
+              className="border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             >
               <option value="all">All Tasks</option>
               <option value="completed">Completed</option>
@@ -264,20 +303,33 @@ const sortedTasks = [...filteredTasks].sort((a, b) => {
             </select>
 
             <select
+  value={priorityFilter}
+  onChange={(e) => setPriorityFilter(e.target.value)}
+  className="border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+>
+  <option value="all">All Priorities</option>
+  <option value="High">High</option>
+  <option value="Medium">Medium</option>
+  <option value="Low">Low</option>
+</select>
+
+            <select
   value={sortBy}
   onChange={(e) => setSortBy(e.target.value)}
-  className="border rounded-lg p-3"
+  className="border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
 >
 <option value="newest">Recently Added</option>
 <option value="oldest">Oldest First</option>
 <option value="dueDate">Due Date</option>
 <option value="priority">Priority</option>
 </select>
-            
+
             </div>
 
             {sortedTasks.length === 0 ? (
-              <div className="text-center py-10">
+              <div className="text-center py-14">
+                <div className="text-5xl mb-4">🗒️</div>
+
                 <h3 className="text-xl font-semibold text-gray-600">
                   No matching tasks found
                 </h3>

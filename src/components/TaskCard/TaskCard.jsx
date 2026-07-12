@@ -1,26 +1,42 @@
+import { FaCalendarAlt, FaCheck, FaUndo, FaEdit, FaTrash } from "react-icons/fa";
+
+const priorityBorder = {
+  High: "border-l-red-500",
+  Medium: "border-l-orange-400",
+  Low: "border-l-blue-500",
+};
+
 function TaskCard({ task, onDelete, onComplete, onEdit }) {
   return (
-    <div className="bg-white shadow-md rounded-lg p-5 border border-gray-200 mb-4">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+    <div
+      className={`bg-white rounded-2xl shadow-md border border-gray-100 border-l-4 ${
+        priorityBorder[task.priority] || "border-l-gray-300"
+      } p-6 mb-5 hover:shadow-xl hover:-translate-y-0.5 transition duration-300`}
+    >
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6">
+
         {/* Task Details */}
         <div className="flex-1">
-          <h3 className="text-xl font-semibold text-gray-800">
+          <h3 className="text-2xl font-bold text-gray-800">
             {task.title}
           </h3>
 
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 mt-3 leading-relaxed">
             {task.description}
           </p>
 
-          <p className="text-sm text-gray-500 mt-3">
-            <span className="font-semibold">Due Date:</span>{" "}
+          <div className="flex flex-wrap gap-2 items-center mt-5 text-sm text-gray-600">
+            <FaCalendarAlt className="text-gray-400" />
+            <span className="font-semibold text-gray-700">
+              Due:
+            </span>
             {task.dueDate || "Not Set"}
-          </p>
+          </div>
 
-          {/* Status & Priority */}
-          <div className="flex flex-wrap gap-2 mt-4">
+          {/* Status Badges */}
+          <div className="flex flex-wrap gap-3 mt-5">
             <span
-              className={`px-3 py-1 rounded-full text-sm font-medium ${
+              className={`px-4 py-1 rounded-full text-sm font-semibold ${
                 task.completed
                   ? "bg-green-100 text-green-700"
                   : "bg-yellow-100 text-yellow-700"
@@ -30,7 +46,7 @@ function TaskCard({ task, onDelete, onComplete, onEdit }) {
             </span>
 
             <span
-              className={`px-3 py-1 rounded-full text-sm font-medium ${
+              className={`px-4 py-1 rounded-full text-sm font-semibold ${
                 task.priority === "High"
                   ? "bg-red-100 text-red-700"
                   : task.priority === "Medium"
@@ -38,37 +54,42 @@ function TaskCard({ task, onDelete, onComplete, onEdit }) {
                   : "bg-blue-100 text-blue-700"
               }`}
             >
-              {task.priority || "Medium"} Priority
+              {task.priority} Priority
             </span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-3 lg:flex-col">
+
           <button
             onClick={() => onComplete(task.id)}
-            className={`text-white px-4 py-2 rounded-lg transition ${
+            className={`flex items-center justify-center gap-2 px-5 py-2 rounded-xl text-white font-medium shadow-sm hover:shadow-md transition ${
               task.completed
                 ? "bg-gray-500 hover:bg-gray-600"
-                : "bg-green-500 hover:bg-green-600"
+                : "bg-green-600 hover:bg-green-700"
             }`}
           >
+            {task.completed ? <FaUndo /> : <FaCheck />}
             {task.completed ? "Undo" : "Complete"}
           </button>
 
           <button
             onClick={() => onEdit(task)}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition"
+            className="flex items-center justify-center gap-2 px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm hover:shadow-md transition"
           >
+            <FaEdit />
             Edit
           </button>
 
           <button
             onClick={() => onDelete(task.id)}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
+            className="flex items-center justify-center gap-2 px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium shadow-sm hover:shadow-md transition"
           >
+            <FaTrash />
             Delete
           </button>
+
         </div>
       </div>
     </div>
